@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import pymysql
 import pymysql.cursors
@@ -10,13 +10,12 @@ app.secret_key = "securetask_cle_secrete_2024"
 CORS(app)
 
 @app.route('/')
-def home():
-    return jsonify({
-        "message": "✅ SecureTask API fonctionne !",
-        "version": "1.0",
-        "endpoints": ["/api/login", "/api/taches", "/api/users"]
-    })
+def index():
+    return send_from_directory('.', 'connexion.html')
 
+@app.route('/<path:filename>')
+def static_files(filename):
+    return send_from_directory('.', filename)
 def get_db():
     return pymysql.connect(
         host=os.environ.get('MYSQLHOST', 'localhost'),
@@ -179,5 +178,5 @@ def get_users():
 init_db()
 
 if __name__ == '__main__':
-    print("✅ SecureTask API démarrée sur http://localhost:5000")
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
