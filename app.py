@@ -104,6 +104,52 @@ def get_users():
     users = cursor.fetchall()
     return jsonify(users)
 
+# ── Créer les tables automatiquement ──
+def init_db():
+    with app.app_context():
+        try:
+            cursor = mysql.connection.cursor()
+            
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    nom VARCHAR(100),
+                    email VARCHAR(100) UNIQUE,
+                    mot_de_passe VARCHAR(255),
+                    role VARCHAR(50),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS taches (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    titre VARCHAR(200),
+                    description TEXT,
+                    priorite VARCHAR(50),
+                    echeance DATE,
+                    assigne_a VARCHAR(100),
+                    statut VARCHAR(50),
+                    labels VARCHAR(255),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            
+            cursor.execute("""
+                INSERT IGNORE INTO users (nom, email, mot_de_passe, role) VALUES
+                ('Karim Alaoui', 'test@securetask.ma', 'password123', 'Lead Sécurité'),
+                ('Ahmad', 'ahmad@securetask.ma', 'password123', 'Ingénieur SSI'),
+                ('Sara', 'sara@securetask.ma', 'password123', 'Ingénieur SSI'),
+                ('Laila', 'laila@securetask.ma', 'password123', 'Observateur')
+            """)
+            
+            mysql.connection.commit()
+            print("✅ Base de données initialisée !")
+            
+        except Exception as e:
+            print(f"⚠️ Erreur DB: {e}")
+
+init_db()
 # ════════════════════════════
 #  LANCEMENT
 # ════════════════════════════
