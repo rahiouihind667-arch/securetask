@@ -9,6 +9,14 @@ app = Flask(__name__)
 app.secret_key = "securetask_cle_secrete_2024"
 CORS(app)
 
+@app.route('/')
+def home():
+    return jsonify({
+        "message": "✅ SecureTask API fonctionne !",
+        "version": "1.0",
+        "endpoints": ["/api/login", "/api/taches", "/api/users"]
+    })
+
 def get_db():
     return pymysql.connect(
         host=os.environ.get('MYSQLHOST', 'localhost'),
