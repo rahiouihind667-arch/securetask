@@ -110,7 +110,9 @@ def get_users():
 
 if __name__ == '__main__':
     print("✅ SecureTask API démarrée sur http://localhost:5000")
-    app.run(debug=True, port=5000)
+    # Railway donne le port via la variable d'environnement PORT
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 # ── Configuration base de données ──
 # En local → utilise XAMPP
@@ -118,8 +120,9 @@ if __name__ == '__main__':
 
 import os
 
-app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
-app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
-app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', '')
-app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'securetask')
+app.config['MYSQL_HOST'] = os.environ.get('MYSQLHOST', 'localhost')
+app.config['MYSQL_USER'] = os.environ.get('MYSQLUSER', 'root')
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQLPASSWORD', '')
+app.config['MYSQL_DB'] = os.environ.get('MYSQLDATABASE', 'securetask')
+app.config['MYSQL_PORT'] = int(os.environ.get('MYSQLPORT', 3306))
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
