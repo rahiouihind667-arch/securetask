@@ -1,1 +1,1 @@
-web: gunicorn app:app --bind 0.0.0.0:8000 --workers 1
+web: gunicorn app:app --bind 0.0.0.0:$GUNICORN_PORT --timeout 120
