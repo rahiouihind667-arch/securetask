@@ -2,7 +2,7 @@
 //  SecureTask — main.js (version avec API)
 // ═══════════════════════════════════════════
 
-const API = 'http://localhost:5000/api';
+const API = 'https://web-production-6d09f.up.railway.app/api';
 
 // ─── AUTH ───
 function isLoggedIn() {
