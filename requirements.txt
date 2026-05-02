@@ -1,6 +1,4 @@
 flask
 flask-cors
-bcrypt
-pymysql
-cryptography
+psycopg2-binary
 gunicorn
