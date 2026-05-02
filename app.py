@@ -10,7 +10,7 @@ CORS(app)
 
 DATABASE_URL = os.environ.get(
     'DATABASE_URL',
-    'postgresql://postgres:TON-MOT-DE-PASSE@db.rsobwoxyijaivbvzefaw.supabase.co:5432/postgres'
+    'postgresql://postgres:Z9qa5U5_i?LPZ8cCfym0@db.rsobwoxyijaivbvzefaw.supabase.co:5432/postgres'
 )
 
 def get_db():
