@@ -10,7 +10,7 @@ CORS(app)
 
 DATABASE_URL = os.environ.get(
     'DATABASE_URL',
-    'postgresql://postgres:Z9qa5U5_i?LPZ8cCfym0@db.rsobwoxyijaivbvzefaw.supabase.co:5432/postgres'
+    'postgresql://postgres:TON-MOT-DE-PASSE@db.rsobwoxyijaivbvzefaw.supabase.co:5432/postgres'
 )
 
 def get_db():
@@ -83,4 +83,53 @@ def create_tache():
             data.get('description', ''),
             data.get('priorite', 'Moyenne'),
             data.get('echeance'),
-            data.get('assigne
+            data.get('assigneA', 'Non assigne'),
+            data.get('statut', 'A faire'),
+            ', '.join(data.get('labels', []))
+        ))
+        db.commit()
+        db.close()
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/taches/<int:id>', methods=['PUT'])
+def update_tache(id):
+    try:
+        data = request.json
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("UPDATE taches SET statut = %s WHERE id = %s", (data['statut'], id))
+        db.commit()
+        db.close()
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/taches/<int:id>', methods=['DELETE'])
+def delete_tache(id):
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("DELETE FROM taches WHERE id = %s", (id,))
+        db.commit()
+        db.close()
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# ── USERS ──
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("SELECT id, nom, email, role FROM users")
+        users = cursor.fetchall()
+        db.close()
+        return jsonify([dict(u) for u in users])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=8000)
